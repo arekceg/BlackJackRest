@@ -2,11 +2,13 @@ package com.arek.blackjack.card;
 
 import com.arek.blackjack.deck.Deck;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "cards")
+@NoArgsConstructor
 public class Card implements Comparable<Card> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,11 +16,11 @@ public class Card implements Comparable<Card> {
 
 	@Getter
 	@Enumerated(value = EnumType.STRING)
-	private final Suite suite;
+	private Suite suite;
 
 	@Getter
 	@Enumerated(value = EnumType.STRING)
-	private final Rank rank;
+	private Rank rank;
 
 	private Card(Rank rank, Suite suite) {
 		this.rank = rank;
