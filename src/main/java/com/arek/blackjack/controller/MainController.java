@@ -37,11 +37,17 @@ public class MainController {
 		return new ResponseEntity<>(deck, HttpStatus.OK);
 	}
 
-	@GetMapping("/getcardfromdeck/{deckId}")
+	@GetMapping("deck/cardfromdeck/{deckId}")
 	public ResponseEntity<Card> getCardFromDeck(@PathVariable Long deckId){
 		Deck deck = deckService.findDeckById(deckId);
 		Card drawnCard = deck.getCardFromDeck();
 		return new ResponseEntity<>(drawnCard,HttpStatus.OK);
 	}
 
+
+	@GetMapping("service/cardfromdeck/{deckId}")
+	public ResponseEntity<Card> getCardFromDeckViaService(@PathVariable Long deckId){
+		Card drawnCard = deckService.drawCardFromDeckByDeckId(deckId);
+		return new ResponseEntity<>(drawnCard,HttpStatus.OK);
+	}
 }
