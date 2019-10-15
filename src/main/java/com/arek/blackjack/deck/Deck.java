@@ -3,12 +3,10 @@ package com.arek.blackjack.deck;
 import com.arek.blackjack.card.Card;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
 
 import javax.persistence.*;
 import java.util.*;
 
-//TODO: Mapowanie na bazę danych listę stringów w hibernate wygooglować @ElementCollection
 @Entity
 @Table(name = "decks")
 @NoArgsConstructor
@@ -37,7 +35,6 @@ public class Deck {
 		return Collections.unmodifiableList(new ArrayList<>(cards));
 	}
 
-	//TODO: MOŻLIWE że hibernate wywołuje metody z *get* bo myśli że to getter
 	public Card drawCardFromDeck() {
 			Card drawnCard = cards.stream().findFirst().orElseThrow(() ->
 					new OutOfCardsException("Deck is out of cards!"));

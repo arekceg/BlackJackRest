@@ -27,7 +27,6 @@ public class DeckService {
 				new BlackJackException("No deck found by id: " + deckId.toString()));
 	}
 
-	//TODO: Not very DDD, functionality should be in Deck class
 	public Card drawCardFromDeck(Deck deck) {
 		return deck.drawCardFromDeck();
 	}
