@@ -1,37 +1,23 @@
 package com.arek.blackjack.deck;
 
 import com.arek.blackjack.card.Card;
-import com.arek.blackjack.card.CardService;
-import exceptions.BlackJackException;
-import exceptions.OutOfCardsException;
+import com.arek.blackjack.exceptions.BlackJackException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: Popatrzeć jak wygląda wywołanie metody @Transactional przez debugger - różnce między wywoływaniem public a private
+//TODO: Elementy springowe utworzone ręcznie nie będą się zachowywać jak obiety springowe
 @Service
 @AllArgsConstructor
+@Transactional
 public class DeckService {
 	private final DeckRepository deckRepository;
-	private final CardService cardService;
 
-	//TODO: Not very DDD, functionality should be in Deck class
-	public Deck getNewDeck() {
-		Deck newDeck = new Deck(this, cardService);
-		fillDeckWithCards(newDeck, cardService.getAllCards()).shuffle();
-		return newDeck;
-	}
-
-	//TODO: Not very DDD, functionality should be in Deck class
-	private Deck fillDeckWithCards(Deck newDeck, List<Card> cards) {
-		if (cards == null || cards.size() < 1) {
-			throw new OutOfCardsException("No cards to fill deck!");
-		}
-		newDeck.fillDeckWithCards(cards);
-		return newDeck;
-	}
-
+	//TODO: SaveDeck powinno być wykonywane transakcyjnie przy rozpoczęciu gry!
 	public void saveDeck(Deck deck) {
 		deckRepository.save(deck);
 	}
@@ -42,16 +28,8 @@ public class DeckService {
 	}
 
 	//TODO: Not very DDD, functionality should be in Deck class
-	public Card drawCardFromDeckByDeckId(Long deckId) {
-		Long firstCardId = getFirstCardIdFromDeckByDeckId(deckId).orElseThrow(() ->
-				new OutOfCardsException("Deck is out of cards!"));
-		deckRepository.removeCardFromDeckByDeckId(deckId, firstCardId);
-		return cardService.getCardById(firstCardId);
+	public Card drawCardFromDeck(Deck deck) {
+		return deck.drawCardFromDeck();
 	}
 
-	private Optional<Long> getFirstCardIdFromDeckByDeckId(Long deckId) {
-		Optional<Long> cardIdOptional =
-				Optional.ofNullable(deckRepository.getFirstCardIdFromDeckByDeckId(deckId));
-		return cardIdOptional;
-	}
 }

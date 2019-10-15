@@ -1,64 +1,47 @@
 package com.arek.blackjack.deck;
 
 import com.arek.blackjack.card.Card;
-import com.arek.blackjack.card.CardService;
-import exceptions.OutOfCardsException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+//TODO: Mapowanie na bazę danych listę stringów w hibernate wygooglować @ElementCollection
 @Entity
 @Table(name = "decks")
 @NoArgsConstructor
 public class Deck {
 
-	@Transient
-	private DeckService deckService;
-	@Transient
-	private CardService cardService;
-
+	@ElementCollection
+	@CollectionTable(name = "decks_cards",
+			joinColumns = @JoinColumn(name = "deck_id"))
+	final Set<Card> cards = new LinkedHashSet<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
 	private Long id;
 
-	@ManyToMany
-	@JoinTable(name = "decks_cards",
-			joinColumns = @JoinColumn(name = "deck_id"),
-			inverseJoinColumns = @JoinColumn(name = "card_id"))
-	private final List<Card> cards = new ArrayList<>();
-
-	@Autowired
-	public Deck(DeckService deckService, CardService cardService) {
-		this.deckService = deckService;
-		this.cardService = cardService;
-		fillDeckWithCards(cardService.getAllCards());
-	}
-
-	public void fillDeckWithCards(List<Card> inputCards) {
-		Collections.shuffle(inputCards);
-		cards.addAll(inputCards);
-	}
-
 	public void shuffle() {
-		if (cards == null || cards.size() == 0) {
-			throw new OutOfCardsException("Cannot shuffle an empty deck!");
+		if (cards.size() == 0) {
+			throw new OutOfCardsException("Deck empty! Cannot shuffle an empty deck!");
 		}
-		Collections.shuffle(cards);
+		List<Card> cardsList = new ArrayList<>(cards);
+		Collections.shuffle(cardsList);
+		cards.clear();
+		cards.addAll(cardsList);
 	}
 
-
-	public ArrayList<Card> getCardsAsList() {
-		return new ArrayList<>(cards);
+	public List<Card> getCardsAsList(){
+		return Collections.unmodifiableList(new ArrayList<>(cards));
 	}
 
-	public Card getCardFromDeck() {
-		return deckService.drawCardFromDeckByDeckId(id);
+	//TODO: MOŻLIWE że hibernate wywołuje metody z *get* bo myśli że to getter
+	public Card drawCardFromDeck() {
+			Card drawnCard = cards.stream().findFirst().orElseThrow(() ->
+					new OutOfCardsException("Deck is out of cards!"));
+			cards.remove(drawnCard);
+			return drawnCard;
 	}
 }

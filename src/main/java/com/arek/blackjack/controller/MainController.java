@@ -1,8 +1,8 @@
 package com.arek.blackjack.controller;
 
 import com.arek.blackjack.card.Card;
-import com.arek.blackjack.card.CardService;
 import com.arek.blackjack.deck.Deck;
+import com.arek.blackjack.deck.DeckFactory;
 import com.arek.blackjack.deck.DeckService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,37 +17,19 @@ import java.util.List;
 @AllArgsConstructor
 public class MainController {
 
-	private CardService cardService;
 	private DeckService deckService;
-
-	@GetMapping("/allcards")
-	public ResponseEntity<List<Card>> getAllCards() {
-		List<Card> allCards = cardService.getAllCards();
-		if (allCards.size() > 0) {
-			return new ResponseEntity<>(allCards, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		}
-	}
+	private DeckFactory deckFactory;
 
 	@GetMapping("/deck")
 	public ResponseEntity<Deck> getDeckOfCards() {
-		Deck deck = new Deck(deckService, cardService);
-		deckService.saveDeck(deck);
+		Deck deck = deckFactory.getNewDeck();
 		return new ResponseEntity<>(deck, HttpStatus.OK);
 	}
 
-	@GetMapping("deck/cardfromdeck/{deckId}")
+	@GetMapping("deck/{deckId}/draw")
 	public ResponseEntity<Card> getCardFromDeck(@PathVariable Long deckId){
 		Deck deck = deckService.findDeckById(deckId);
-		Card drawnCard = deck.getCardFromDeck();
-		return new ResponseEntity<>(drawnCard,HttpStatus.OK);
-	}
-
-
-	@GetMapping("service/cardfromdeck/{deckId}")
-	public ResponseEntity<Card> getCardFromDeckViaService(@PathVariable Long deckId){
-		Card drawnCard = deckService.drawCardFromDeckByDeckId(deckId);
+		Card drawnCard = deckService.drawCardFromDeck(deck);
 		return new ResponseEntity<>(drawnCard,HttpStatus.OK);
 	}
 }

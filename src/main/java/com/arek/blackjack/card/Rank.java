@@ -18,14 +18,13 @@ public enum Rank {
 	KING(10),
 	ACE(11);
 
-	private Long id;
 	private final int value;
 
 	Rank(int value){
 		this.value = value;
 	}
 
-	public int value(){
+	public int getValue(){
 		return value;
 	}
 }
