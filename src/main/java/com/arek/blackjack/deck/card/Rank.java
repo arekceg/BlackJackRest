@@ -1,6 +1,4 @@
-package com.arek.blackjack.card;
-
-import javax.persistence.*;
+package com.arek.blackjack.deck.card;
 
 
 public enum Rank {

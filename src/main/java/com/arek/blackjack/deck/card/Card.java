@@ -1,10 +1,10 @@
-package com.arek.blackjack.card;
+package com.arek.blackjack.deck.card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.arek.blackjack.card.Rank.JACK;
+import static com.arek.blackjack.deck.card.Rank.JACK;
 
 public enum Card {
 

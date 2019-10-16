@@ -1,10 +1,8 @@
-package com.arek.blackjack.deck;
+package com.arek.blackjack.player;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
-public interface DeckRepository extends JpaRepository<Deck,Long> {
-
+interface PlayerRepository extends JpaRepository<Player, Long> {
 }

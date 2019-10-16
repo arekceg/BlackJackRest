@@ -1,9 +1,9 @@
-package com.arek.blackjack.card;
+package com.arek.blackjack.deck.card;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class CardFactoryImpl implements CardFactory {
+class CardFactoryImpl implements CardFactory {
 
 	@Override
 	public Card getCard(Rank rank, Suite suite) {

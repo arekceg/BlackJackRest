@@ -1,4 +1,4 @@
-package com.arek.blackjack.card;
+package com.arek.blackjack.deck.card;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.arek.blackjack.card;
+package com.arek.blackjack.deck.card;
 
 import com.arek.blackjack.exceptions.BlackJackException;
 
