@@ -1,0 +1,34 @@
+<!--<configuration>-->
+<!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+<!--    <logger name="com.arek" level="INFO"/>-->
+<!--    <logger name="org.springframework" level="INFO"/>-->
+<!--</configuration>-->
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) [%class{0}] %logger{0}.%M - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>log/BlackJackRest.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+			<!-- Keep 7 days' worth of history -->
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%class{0}] %logger{0} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE"/>
+	</root>
+
+</configuration>

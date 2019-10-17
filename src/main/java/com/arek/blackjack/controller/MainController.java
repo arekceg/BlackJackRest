@@ -3,6 +3,8 @@ package com.arek.blackjack.controller;
 import com.arek.blackjack.deck.Deck;
 import com.arek.blackjack.deck.DeckService;
 import com.arek.blackjack.deck.card.Card;
+import com.arek.blackjack.game.Game;
+import com.arek.blackjack.game.GameService;
 import com.arek.blackjack.player.Player;
 import com.arek.blackjack.player.PlayerService;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class MainController {
 
 	private final DeckService deckService;
 	private final PlayerService playerService;
+	private final GameService gameService;
 
 	@GetMapping("/player")
 	public ResponseEntity<Player> getPlayer() {
@@ -46,5 +49,11 @@ public class MainController {
 		Player player = playerService.getPlayerById(playerId);
 		playerService.hitPlayerWithCard(player, drawnCard);
 		return new ResponseEntity<>(player, HttpStatus.OK);
+	}
+
+	@GetMapping("/game/{playerCount}")
+	public ResponseEntity<Game> getNewGame(@PathVariable int playerCount) {
+		Game game =  gameService.createAndPersistGameWithPlayers(playerCount);
+		return new ResponseEntity<>(game, HttpStatus.OK);
 	}
 }
