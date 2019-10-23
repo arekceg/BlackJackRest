@@ -15,16 +15,18 @@ import java.util.Set;
 //TODO: Start implementing game logic
 @Entity
 @Slf4j
+@NamedEntityGraph(name = "graph.Game.players",
+		attributeNodes = @NamedAttributeNode(value = "players", subgraph = "graph.Player"),
+		subgraphs = @NamedSubgraph(name = "graph.Player",
+				attributeNodes = @NamedAttributeNode(value = "cards")))
 public class Game {
 
+	@OneToMany(fetch = FetchType.LAZY)
+	private final Set<Player> players = new HashSet<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
 	private Long id;
-
-	@OneToMany
-	private final Set<Player> players = new HashSet<>();
-
 	@OneToOne
 	@Setter
 	@Getter
@@ -41,7 +43,7 @@ public class Game {
 		}
 	}
 
-	public List<Player> getPlayersAsList(){
+	public List<Player> getPlayersAsList() {
 		return new ArrayList<>(players);
 	}
 }
